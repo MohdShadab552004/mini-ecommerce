@@ -1,14 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const ProductForm = () =>{
   const [form, setForm] = useState({ name: "", price: "", description: "", image_url: "" });
 
   const handleSubmit = async (e) => {
-    console.log("Submitting form...", form);
-    
     e.preventDefault();
-    await axios.post("http://localhost:5000/api/products", form);
+    await axios.post(`${apiUrl}/api/products`, form);
     alert("Product Added!");
     setForm({ name: "", price: "", description: "", image_url: "" });
   };

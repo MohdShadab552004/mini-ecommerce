@@ -27,7 +27,7 @@ const MyProduct = () => {
       }
     }, 300); 
 
-    return () => clearTimeout(delaySearch); // cleanup
+    return () => clearTimeout(delaySearch);
   }, [query]);
 
   return (
@@ -36,7 +36,7 @@ const MyProduct = () => {
       <input
         type="text"
         placeholder="Search for something..."
-        className="w-[500px] p-2 mb-10 border rounded mb-5 max-sm:w-[300px]"
+        className="w-[500px] p-2 mb-10 border rounded max-sm:w-[300px]"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
