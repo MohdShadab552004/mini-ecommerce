@@ -1,38 +1,50 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCart";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const MyProduct = () => {
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
 
-  // Fetch all products initially
-  useEffect(() => {
-    fetchProducts();
+  const fetchProducts = useCallback(async () => {
+    try {
+      const res = await axios.get(`${apiUrl}/api/products`);
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to fetch products", err);
+    }
   }, []);
 
-  const fetchProducts = async () => {
-    const res = await axios.get(`${apiUrl}/api/products`);
-    setProducts(res.data);
-  };
+  const searchProducts = useCallback(async () => {
+    try {
+      const res = await axios.get(`${apiUrl}/api/search?query=${query}`);
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Search failed", err);
+    }
+  }, [query]);
 
   useEffect(() => {
-    const delaySearch = setTimeout(async () => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
       if (query.trim() === "") {
-        fetchProducts(); 
+        fetchProducts();
       } else {
-        const res = await axios.get(`${apiUrl}/api/search?query=${query}`);
-        setProducts(res.data);
+        searchProducts();
       }
-    }, 300); 
+    }, 300);
 
     return () => clearTimeout(delaySearch);
-  }, [query]);
+  }, [query, fetchProducts, searchProducts]);
 
   return (
     <div className="max-w-[1024px] m-auto p-5">
-        
       <input
         type="text"
         placeholder="Search for something..."

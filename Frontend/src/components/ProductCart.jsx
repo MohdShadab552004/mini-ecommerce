@@ -13,5 +13,5 @@ const ProductCart = ({ data }) => {
         </section>
     );
 }
-export default ProductCart;
+export default React.memo(ProductCart);
 
